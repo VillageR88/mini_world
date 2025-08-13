@@ -20,18 +20,25 @@ public class App {
   }
 
   public static void main(String[] args) {
-    System.out.print("\n");
+    System.out.println("Welcome to mini world.\n");
     Scanner myScanner = new Scanner(System.in);
     Grid grid = new Grid();
     seedGrid(grid);
     String myInput = "";
     while (!"q".equals(myInput)) {
+      System.out.println(
+        "Day" +
+        grid.getTime() +
+        (grid.isProductionDay() ? " (production day) " : "") +
+        "\n"
+      );
       App.drawWorld(grid);
       System.out.print("\n");
       System.out.println(
         "any word or letter to continue simulation or q to quit."
       );
       myInput = myScanner.nextLine();
+      grid.proceedTime();
     }
     myScanner.close();
   }
