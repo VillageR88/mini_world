@@ -5,9 +5,9 @@ import java.util.Scanner;
 public class App {
 
   private static void drawWorld(Grid grid) {
-    for (char[] row : grid.getGrid()) {
-      for (char element : row) {
-        System.out.print(element != 0 ? element : '_');
+    for (Entity[] row : grid.getGrid()) {
+      for (Entity element : row) {
+        System.out.print(element != null ? element.symbol : '_');
         System.out.print("  ");
       }
       System.out.print("\n");
@@ -16,7 +16,7 @@ public class App {
 
   public static void seedGrid(Grid grid) {
     Base player1Base = new Base('V', 1);
-    grid.setGrid(0, 0, player1Base.symbol);
+    grid.setGrid(0, 0, player1Base);
   }
 
   public static void main(String[] args) {
@@ -27,11 +27,12 @@ public class App {
     String myInput = "";
     while (!"q".equals(myInput)) {
       System.out.println(
-        "Day" +
+        "Day " +
         grid.getTime() +
-        (grid.isProductionDay() ? " (production day) " : "") +
+        (grid.isProductionDay() ? " (production day)" : "") +
         "\n"
       );
+      if (grid.isProductionDay()) grid.produceUnits();
       App.drawWorld(grid);
       System.out.print("\n");
       System.out.println(

@@ -2,15 +2,15 @@ package mini_world;
 
 public class Grid {
 
-  private final char[][] grid = new char[10][10];
+  private final Entity[][] grid = new Entity[10][10];
   private int time = 1;
 
-  public char[][] getGrid() {
+  public Entity[][] getGrid() {
     return grid;
   }
 
-  public void setGrid(int x, int y, char newSymbol) {
-    this.grid[x][y] = newSymbol;
+  public void setGrid(int x, int y, Entity entity) {
+    this.grid[x][y] = entity;
   }
 
   public int getTime() {
@@ -19,6 +19,12 @@ public class Grid {
 
   public boolean isProductionDay() {
     return time % 7 == 1;
+  }
+
+  public void produceUnits() {
+    for (Entity[] row : grid) {
+      for (Entity element : row) {}
+    }
   }
 
   public void proceedTime() {
