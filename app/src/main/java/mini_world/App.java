@@ -14,9 +14,16 @@ public class App {
     }
   }
 
+  public static void seedGrid(Grid grid) {
+    Base player1Base = new Base('V', 1);
+    grid.setGrid(0, 0, player1Base.symbol);
+  }
+
   public static void main(String[] args) {
+    System.out.print("\n");
     Scanner myScanner = new Scanner(System.in);
     Grid grid = new Grid();
+    seedGrid(grid);
     String myInput = "";
     while (!"q".equals(myInput)) {
       App.drawWorld(grid);
