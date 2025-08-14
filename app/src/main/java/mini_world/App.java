@@ -15,7 +15,7 @@ public class App {
   }
 
   public static void seedGrid(Grid grid) {
-    Base player1Base = new Base('V', 1);
+    Base player1Base = new Base('A', 1);
     grid.setGrid(0, 0, player1Base);
   }
 
