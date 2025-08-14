@@ -73,7 +73,7 @@ public class Grid {
   }
 
   @SuppressWarnings("UnnecessaryContinue")
-  public void produceUnits() {
+  public void produceUnits() { // TODO: generate skipLegDay method
     for (int y = 0; y < 10; y++) {
       for (int x = 0; x < 10; x++) {
         Entity entity = grid[y][x];
@@ -94,6 +94,31 @@ public class Grid {
           int unitSide = entity.side;
           Unit unit = new Unit(unitSymbol, unitSide);
           grid[dY][dX] = unit;
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings("UnnecessaryContinue")
+  public void moveUnits() { // TODO: generate skipLegDay method
+    for (int y = 0; y < 10; y++) {
+      for (int x = 0; x < 10; x++) {
+        Entity entity = grid[y][x];
+        ScanResult scanResult = perimeterScan(
+          x,
+          y,
+          entity != null && entity.canMove
+        );
+        if (scanResult == null) continue; else if (
+          scanResult.possibilitiesLength > 0
+        ) {
+          int rolledMove = (int) (
+            Math.random() * scanResult.possibilitiesLength
+          );
+          int mY = scanResult.possibleLocations[rolledMove][0];
+          int mX = scanResult.possibleLocations[rolledMove][1];
+          grid[mY][mX] = grid[y][x];
+          grid[y][x] = null;
         }
       }
     }

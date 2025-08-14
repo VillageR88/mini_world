@@ -33,6 +33,7 @@ public class App {
         "\n"
       );
       if (grid.isProductionDay()) grid.produceUnits();
+      grid.moveUnits();
       App.drawWorld(grid);
       System.out.print("\n");
       System.out.println(
