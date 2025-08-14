@@ -23,29 +23,29 @@ public class App {
 
   public static void main(String[] args) {
     System.out.println("Welcome to mini world.\n");
-    Scanner myScanner = new Scanner(System.in);
     Grid grid = new Grid();
     seedGrid(grid);
     String myInput = "";
-    while (!"q".equals(myInput)) {
-      System.out.println(
-        "Day " +
-        grid.getTime() +
-        (grid.isProductionDay() ? " (production day)" : "") +
-        "\n"
-      );
-      if (grid.isProductionDay()) grid.produceUnits();
-      grid.doFight();
-      grid.moveUnits();
-      App.drawWorld(grid);
-      System.out.print("\n");
-      System.out.println(
-        "any word or letter to continue simulation or q to quit."
-      );
-      myInput = myScanner.nextLine();
-      grid.eraseSkipLegDayCoordinates();
-      grid.proceedTime();
+    try (Scanner myScanner = new Scanner(System.in)) {
+      while (!"q".equals(myInput)) {
+        System.out.println(
+          "Day " +
+          grid.getTime() +
+          (grid.isProductionDay() ? " (production day)" : "") +
+          "\n"
+        );
+        if (grid.isProductionDay()) grid.produceUnits();
+        grid.doFight();
+        grid.moveUnits();
+        App.drawWorld(grid);
+        System.out.print("\n");
+        System.out.println(
+          "hit 'enter' to continue simulation or input 'q' to quit."
+        );
+        myInput = myScanner.nextLine();
+        grid.eraseSkipLegDayCoordinates();
+        grid.proceedTime();
+      }
     }
-    myScanner.close();
   }
 }
