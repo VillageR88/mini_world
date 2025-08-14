@@ -40,6 +40,7 @@ public class App {
         "any word or letter to continue simulation or q to quit."
       );
       myInput = myScanner.nextLine();
+      grid.eraseSkipLegDayCoordinates();
       grid.proceedTime();
     }
     myScanner.close();

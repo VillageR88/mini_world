@@ -4,6 +4,15 @@ public class Grid {
 
   private final Entity[][] grid = new Entity[10][10];
   private int time = 1;
+  private final boolean[][] skipLegDayCoordinates = new boolean[10][10];
+
+  public void eraseSkipLegDayCoordinates() {
+    for (int y = 0; y < 10; y++) {
+      for (int x = 0; x < 10; x++) {
+        skipLegDayCoordinates[y][x] = false;
+      }
+    }
+  }
 
   public Entity[][] getGrid() {
     return grid;
@@ -21,15 +30,6 @@ public class Grid {
     return time % 7 == 1;
   }
 
-  // public void moveUnits() {
-  //   for (int y = 0; y < 10; y++) {
-  //     for (int x = 0; x < 10; x++) {
-  //       Entity entity = grid[y][x];
-  //       if (entity != null && entity.canMove) {}
-  //     }
-  //   }
-  // }
-
   private class ScanResult {
 
     int[][] possibleLocations;
@@ -41,7 +41,6 @@ public class Grid {
     }
   }
 
-  @SuppressWarnings("UnnecessaryContinue")
   private ScanResult perimeterScan(int x, int y, boolean condition) {
     if (condition) {
       int firstSectorX = x - 1;
@@ -57,23 +56,20 @@ public class Grid {
         horizontal++
       ) {
         if (horizontal < 0 || horizontal > 9) continue; // X is out of boundaries
-        else if (vertical < 0 || vertical > 9) continue; // Y is out of boundaries
-        else if (grid[vertical][horizontal] != null) continue; // Sector is already taken by -> grid[vertical][horizontal].symbol
-        else {
-          scanResult.possibleLocations[scanResult.possibilitiesLength][0] =
-            vertical;
-          scanResult.possibleLocations[scanResult.possibilitiesLength][1] =
-            horizontal;
-          scanResult.possibilitiesLength++;
-        }
+        if (vertical < 0 || vertical > 9) continue; // Y is out of boundaries
+        if (grid[vertical][horizontal] != null) continue; // Sector is already taken by -> grid[vertical][horizontal].symbol
+        scanResult.possibleLocations[scanResult.possibilitiesLength][0] =
+          vertical;
+        scanResult.possibleLocations[scanResult.possibilitiesLength][1] =
+          horizontal;
+        scanResult.possibilitiesLength++;
       }
       return scanResult;
     }
     return null;
   }
 
-  @SuppressWarnings("UnnecessaryContinue")
-  public void produceUnits() { // TODO: generate skipLegDay method
+  public void produceUnits() {
     for (int y = 0; y < 10; y++) {
       for (int x = 0; x < 10; x++) {
         Entity entity = grid[y][x];
@@ -82,9 +78,8 @@ public class Grid {
           y,
           entity != null && entity.canSpawnEntity
         );
-        if (scanResult == null) continue; else if (
-          scanResult.possibilitiesLength > 0
-        ) {
+        if (scanResult == null) continue;
+        if (scanResult.possibilitiesLength > 0) {
           int rolledDeployment = (int) (
             Math.random() * scanResult.possibilitiesLength
           );
@@ -94,12 +89,12 @@ public class Grid {
           int unitSide = entity.side;
           Unit unit = new Unit(unitSymbol, unitSide);
           grid[dY][dX] = unit;
+          skipLegDayCoordinates[dY][dX] = true;
         }
       }
     }
   }
 
-  @SuppressWarnings("UnnecessaryContinue")
   public void moveUnits() { // TODO: generate skipLegDay method
     for (int y = 0; y < 10; y++) {
       for (int x = 0; x < 10; x++) {
@@ -109,15 +104,16 @@ public class Grid {
           y,
           entity != null && entity.canMove
         );
-        if (scanResult == null) continue; else if (
-          scanResult.possibilitiesLength > 0
-        ) {
+        if (skipLegDayCoordinates[y][x] == true) continue;
+        if (scanResult == null) continue;
+        if (scanResult.possibilitiesLength > 0) {
           int rolledMove = (int) (
             Math.random() * scanResult.possibilitiesLength
           );
           int mY = scanResult.possibleLocations[rolledMove][0];
           int mX = scanResult.possibleLocations[rolledMove][1];
           grid[mY][mX] = grid[y][x];
+          skipLegDayCoordinates[mY][mX] = true;
           grid[y][x] = null;
         }
       }
