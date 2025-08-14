@@ -16,7 +16,9 @@ public class App {
 
   public static void seedGrid(Grid grid) {
     Base player1Base = new Base('A', 1);
+    Base player2Base = new Base('B', 2);
     grid.setGrid(0, 0, player1Base);
+    grid.setGrid(9, 9, player2Base);
   }
 
   public static void main(String[] args) {
@@ -33,6 +35,7 @@ public class App {
         "\n"
       );
       if (grid.isProductionDay()) grid.produceUnits();
+      grid.doFight();
       grid.moveUnits();
       App.drawWorld(grid);
       System.out.print("\n");
