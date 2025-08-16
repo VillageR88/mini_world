@@ -11,7 +11,7 @@ Players have bases, produce units periodically, move them on a grid, and engage 
 - Quit anytime with `q`
 
 ## Requirements
-- Java 21+ (or any compatible version)
+- Java 22+ (or any compatible version)
 - Gradle (wrapper included)
 
 ## Build
