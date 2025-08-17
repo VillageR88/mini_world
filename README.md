@@ -11,19 +11,28 @@ Players have bases, produce units periodically, move them on a grid, and engage 
 - Quit anytime with `q`
 
 ## Requirements
-- Java 21+ (or any compatible version)
+- Java 22+ (or any compatible version)
 - Gradle (wrapper included)
 
 ## Build
 Use the Gradle wrapper to build the project:
+- **Windows:** 
 ```bash
 .\gradlew.bat build
 ```
-
+- **Linux/macOS:** 
+```bash
+./gradlew build
+```
 ## Run
 After building, run the application using:
+- **Windows:** 
 ```bash
-java -cp app/build/classes/java/main mini_world.App
+.\gradlew.bat run
+```
+- **Linux/macOS:** 
+```bash
+./gradlew run
 ```
 
 ## Controls
@@ -32,7 +41,6 @@ java -cp app/build/classes/java/main mini_world.App
 
 
 ## Future Development
-- Introducing a graphical user interface (GUI) via JavaFX
 - Improvements to game mechanics
 - Implementing AI-driven unit behavior
 
