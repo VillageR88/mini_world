@@ -14,10 +14,10 @@
       prefWidth="600" prefHeight="400">
   <children>
     <Label fx:id="label" />
-    <Canvas fx:id="canvas" width="380" height="380" />
+    <Canvas fx:id="canvas" width="400" height="400" />
     <HBox spacing="10" alignment="CENTER">
     <Button fx:id="buttonSimulation" text="Run simulation" />
-    <Button text="Quit" onAction="#handleButtonQuitClick"/>
+    <Button fx:id="buttonQuit" text="Quit" />
     </HBox>
   </children>
 </VBox>

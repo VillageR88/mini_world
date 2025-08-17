@@ -10,28 +10,42 @@ import javafx.scene.paint.Color;
 
 public class FXMLController {
 
-  Grid grid = new Grid();
-
   @FXML
   private Label label;
-
-  @FXML
-  private Canvas canvas;
 
   @FXML
   private Button buttonSimulation;
 
   @FXML
-  private void handleButtonQuitClick() {
-    Platform.exit();
-  }
+  private Button buttonQuit;
+
+  @FXML
+  private Canvas canvas;
+
+  double canvasSectorSpace;
 
   private void drawWorld(Grid grid, GraphicsContext canvasGc) {
     int y = 0;
     int x = 0;
-    canvasGc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    int canvasX = 0;
+    int canvasY = 0;
     canvasGc.setFill(Color.LIGHTGRAY);
     canvasGc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    for (int v = 0; v < 10; v++) {
+      if (v % 2 == 0) canvasX += canvasSectorSpace;
+      for (int h = 0; h < 5; h++) {
+        canvasGc.setFill(Color.GRAY);
+        canvasGc.fillRect(
+          canvasX,
+          canvasY,
+          canvasSectorSpace,
+          canvasSectorSpace
+        );
+        canvasX += canvasSectorSpace * 2;
+      }
+      canvasX = 0;
+      canvasY += canvasSectorSpace;
+    }
     for (Entity[] row : grid.getGrid()) {
       for (Entity element : row) {
         if (element != null) {
@@ -39,11 +53,16 @@ public class FXMLController {
             element.side == 2
           ) canvasGc.setFill(Color.RED);
           if (element.canSpawnEntity) canvasGc.fillOval(
-            x,
-            y,
+            x + (0.5 * canvasSectorSpace) - 10,
+            y + (0.5 * canvasSectorSpace) - 10,
             20,
             20
-          ); else canvasGc.fillOval(x, y, 15, 15);
+          ); else canvasGc.fillOval(
+            x + (0.5 * canvasSectorSpace) - 7.5,
+            y + (0.5 * canvasSectorSpace) - 7.5,
+            15,
+            15
+          );
         }
         x += 40;
       }
@@ -53,24 +72,31 @@ public class FXMLController {
   }
 
   public void initialize() {
-    MainApp.seedGrid(grid);
+    canvasSectorSpace = canvas.getWidth() / 10;
+    canvasSectorSpace = canvas.getHeight() / 10;
+    MainApp.seedGrid(MainApp.grid);
     GraphicsContext canvasGc = canvas.getGraphicsContext2D();
     label.setText(
       "Day " +
-      grid.getTime() +
-      (grid.isProductionDay() ? " (production day)" : "") +
+      MainApp.grid.getTime() +
+      (MainApp.grid.isProductionDay() ? " (production day)" : "") +
       "\n"
     );
     buttonSimulation.setOnAction(e -> {
-      MainApp.simulateOneDay(grid);
+      MainApp.grid.proceedTime();
+      MainApp.simulateOneDay(MainApp.grid);
       label.setText(
         "Day " +
-        grid.getTime() +
-        (grid.isProductionDay() ? " (production day)" : "") +
+        MainApp.grid.getTime() +
+        (MainApp.grid.isProductionDay() ? " (production day)" : "") +
         "\n"
       );
-      drawWorld(grid, canvasGc);
+      drawWorld(MainApp.grid, canvasGc);
     });
-    buttonSimulation.fire();
+    buttonQuit.setOnAction(e -> {
+      Platform.exit();
+    });
+    MainApp.simulateOneDay(MainApp.grid);
+    drawWorld(MainApp.grid, canvasGc);
   }
 }

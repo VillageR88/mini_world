@@ -8,6 +8,12 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+  static Grid grid = new Grid();
+
+  public Grid getGrid() {
+    return grid;
+  }
+
   @Override
   public void start(Stage stage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("scene.fxml"));
@@ -34,7 +40,6 @@ public class MainApp extends Application {
     grid.doFight();
     grid.moveUnits();
     grid.eraseSkipLegDayCoordinates();
-    grid.proceedTime();
   }
 
   public static void main(String[] args) {
