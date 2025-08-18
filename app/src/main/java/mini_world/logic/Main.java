@@ -32,19 +32,19 @@ public class Main {
   }
 
   public static boolean getEntityNotNull(int x, int y) {
-    return grid.grid[y][x] != null;
+    return grid.isNotNullEntity(x, y);
   }
 
   public static boolean getEntityCanSpawnEntity(int x, int y) {
-    return grid.grid[y][x].getCanSpawnEntity();
+    return grid.canSpawnEntity(x, y);
   }
 
   public static int getEntitySide(int x, int y) {
-    return grid.grid[y][x].side;
+    return grid.getEntitySide(x, y);
   }
 
   public static int getTime() {
-    return grid.time;
+    return grid.getTime();
   }
 
   public static boolean isProductionDay() {

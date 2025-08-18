@@ -2,14 +2,26 @@ package mini_world.model;
 
 public class Entity {
 
-  boolean canSpawnEntity;
-  boolean canMove;
-  boolean canFight;
-  char symbol;
-  public int side;
+  private final boolean canSpawnEntity;
+  private boolean canMove;
+  private final boolean canFight;
+  private final char symbol;
+  private final int side;
 
   public boolean getCanSpawnEntity() {
     return canSpawnEntity;
+  }
+
+  public boolean getCanMove() {
+    return canMove;
+  }
+
+  public char getSymbol() {
+    return symbol;
+  }
+
+  public int getSide() {
+    return side;
   }
 
   public Entity(
