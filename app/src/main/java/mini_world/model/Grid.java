@@ -1,10 +1,10 @@
-package mini_world;
+package mini_world.model;
 
 public class Grid {
 
-  private final Entity[][] grid = new Entity[10][10];
-  private int time = 1;
-  private final boolean[][] skipLegDayCoordinates = new boolean[10][10];
+  public final Entity[][] grid = new Entity[10][10];
+  public int time = 1;
+  public final boolean[][] skipLegDayCoordinates = new boolean[10][10];
 
   public void eraseSkipLegDayCoordinates() {
     for (int y = 0; y < 10; y++) {
@@ -14,16 +14,8 @@ public class Grid {
     }
   }
 
-  public Entity[][] getGrid() {
-    return grid;
-  }
-
   public void setGrid(int x, int y, Entity entity) {
     this.grid[y][x] = entity;
-  }
-
-  public int getTime() {
-    return time;
   }
 
   public boolean isProductionDay() {

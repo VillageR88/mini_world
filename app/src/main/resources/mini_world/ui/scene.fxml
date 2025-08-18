@@ -9,7 +9,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/24"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="mini_world.FXMLController"
+      fx:controller="mini_world.ui.FXMLController"
       spacing="10" alignment="CENTER"
       prefWidth="600" prefHeight="400">
   <children>

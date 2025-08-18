@@ -1,4 +1,4 @@
-package mini_world;
+package mini_world.model;
 
 public class Unit extends Entity {
 

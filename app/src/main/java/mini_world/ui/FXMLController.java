@@ -1,4 +1,4 @@
-package mini_world;
+package mini_world.ui;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import mini_world.logic.Main;
 
 public class FXMLController {
 
@@ -24,7 +25,7 @@ public class FXMLController {
 
   double canvasSectorSpace;
 
-  private void drawWorld(Grid grid, GraphicsContext canvasGc) {
+  private void drawWorld(GraphicsContext canvasGc) {
     int y = 0;
     int x = 0;
     int canvasX = 0;
@@ -46,13 +47,15 @@ public class FXMLController {
       canvasX = 0;
       canvasY += canvasSectorSpace;
     }
-    for (Entity[] row : grid.getGrid()) {
-      for (Entity element : row) {
-        if (element != null) {
-          if (element.side == 1) canvasGc.setFill(Color.BLUE); else if (
-            element.side == 2
-          ) canvasGc.setFill(Color.RED);
-          if (element.canSpawnEntity) canvasGc.fillOval(
+    for (int eY = 0; eY < 10; eY++) {
+      for (int eX = 0; eX < 10; eX++) {
+        if (Main.getEntityNotNull(eX, eY)) {
+          if (Main.getEntitySide(eX, eY) == 1) canvasGc.setFill(
+            Color.BLUE
+          ); else if (Main.getEntitySide(eX, eY) == 2) canvasGc.setFill(
+            Color.RED
+          );
+          if (Main.getEntityCanSpawnEntity(eX, eY)) canvasGc.fillOval(
             x + (0.5 * canvasSectorSpace) - 10,
             y + (0.5 * canvasSectorSpace) - 10,
             20,
@@ -74,29 +77,26 @@ public class FXMLController {
   public void initialize() {
     canvasSectorSpace = canvas.getWidth() / 10;
     canvasSectorSpace = canvas.getHeight() / 10;
-    MainApp.seedGrid(MainApp.grid);
     GraphicsContext canvasGc = canvas.getGraphicsContext2D();
     label.setText(
       "Day " +
-      MainApp.grid.getTime() +
-      (MainApp.grid.isProductionDay() ? " (production day)" : "") +
+      Main.getTime() +
+      (Main.isProductionDay() ? " (production day)" : "") +
       "\n"
     );
     buttonSimulation.setOnAction(e -> {
-      MainApp.grid.proceedTime();
-      MainApp.simulateOneDay(MainApp.grid);
+      Main.simulateNextDay();
       label.setText(
         "Day " +
-        MainApp.grid.getTime() +
-        (MainApp.grid.isProductionDay() ? " (production day)" : "") +
+        Main.getTime() +
+        (Main.isProductionDay() ? " (production day)" : "") +
         "\n"
       );
-      drawWorld(MainApp.grid, canvasGc);
+      drawWorld(canvasGc);
     });
     buttonQuit.setOnAction(e -> {
       Platform.exit();
     });
-    MainApp.simulateOneDay(MainApp.grid);
-    drawWorld(MainApp.grid, canvasGc);
+    drawWorld(canvasGc);
   }
 }

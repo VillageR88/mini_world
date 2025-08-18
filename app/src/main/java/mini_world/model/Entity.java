@@ -1,4 +1,4 @@
-package mini_world;
+package mini_world.model;
 
 public class Entity {
 
@@ -6,7 +6,11 @@ public class Entity {
   boolean canMove;
   boolean canFight;
   char symbol;
-  int side;
+  public int side;
+
+  public boolean getCanSpawnEntity() {
+    return canSpawnEntity;
+  }
 
   public Entity(
     boolean canSpawnEntity,
