@@ -40,7 +40,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'mini_world.MainApp'
+    mainClass = 'mini_world.logic.Main'
 }
 
 tasks.named('test') {

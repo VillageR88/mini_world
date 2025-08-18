@@ -1,4 +1,4 @@
-package mini_world;
+package mini_world.model;
 
 public class Grid {
 
@@ -14,16 +14,24 @@ public class Grid {
     }
   }
 
-  public Entity[][] getGrid() {
-    return grid;
+  public int getTime() {
+    return time;
   }
 
   public void setGrid(int x, int y, Entity entity) {
     this.grid[y][x] = entity;
   }
 
-  public int getTime() {
-    return time;
+  public boolean isNotNullEntity(int x, int y) {
+    return grid[y][x] != null;
+  }
+
+  public boolean canSpawnEntity(int x, int y) {
+    return grid[y][x].getCanSpawnEntity();
+  }
+
+  public int getEntitySide(int x, int y) {
+    return grid[y][x].getSide();
   }
 
   public boolean isProductionDay() {
@@ -72,7 +80,9 @@ public class Grid {
         ) continue;
         if (stance == Stance.FIGHT) {
           if (grid[vertical][horizontal] == null) continue;
-          if (grid[vertical][horizontal].side == grid[y][x].side) continue;
+          if (
+            grid[vertical][horizontal].getSide() == grid[y][x].getSide()
+          ) continue;
         }
         scanResult.possibleLocations[scanResult.possibilitiesLength][0] =
           vertical;
@@ -92,7 +102,7 @@ public class Grid {
         ScanResult scanResult = perimeterScan(
           x,
           y,
-          entity != null && entity.canSpawnEntity,
+          entity != null && entity.getCanSpawnEntity(),
           Stance.AVOID
         );
         if (scanResult == null) continue;
@@ -102,8 +112,8 @@ public class Grid {
           );
           int dY = scanResult.possibleLocations[rolledDeployment][0];
           int dX = scanResult.possibleLocations[rolledDeployment][1];
-          char unitSymbol = Character.toLowerCase(entity.symbol);
-          int unitSide = entity.side;
+          char unitSymbol = Character.toLowerCase(entity.getSymbol());
+          int unitSide = entity.getSide();
           Unit unit = new Unit(unitSymbol, unitSide);
           grid[dY][dX] = unit;
           skipLegDayCoordinates[dY][dX] = true;
@@ -143,7 +153,7 @@ public class Grid {
         ScanResult scanResult = perimeterScan(
           x,
           y,
-          entity != null && entity.canMove,
+          entity != null && entity.getCanMove(),
           Stance.AVOID
         );
         if (skipLegDayCoordinates[y][x] == true) continue;
