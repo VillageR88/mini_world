@@ -6,6 +6,30 @@ public class Grid {
   private int time = 1;
   private final boolean[][] skipLegDayCoordinates = new boolean[10][10];
 
+  public Grid() {
+    Base player1Base = new Base('A', 1);
+    Base player2Base = new Base('B', 2);
+    setGrid(0, 0, player1Base);
+    setGrid(9, 9, player2Base);
+    simulateOneDay();
+  }
+
+  private void setGrid(int x, int y, Entity entity) {
+    this.grid[y][x] = entity;
+  }
+
+  private void simulateOneDay() {
+    if (isProductionDay()) produceUnits();
+    doFight();
+    moveUnits();
+    eraseSkipLegDayCoordinates();
+  }
+
+  public void simulateNextDay() {
+    proceedTime();
+    simulateOneDay();
+  }
+
   public void eraseSkipLegDayCoordinates() {
     for (int y = 0; y < 10; y++) {
       for (int x = 0; x < 10; x++) {
@@ -16,10 +40,6 @@ public class Grid {
 
   public int getTime() {
     return time;
-  }
-
-  public void setGrid(int x, int y, Entity entity) {
-    this.grid[y][x] = entity;
   }
 
   public boolean isNotNullEntity(int x, int y) {
