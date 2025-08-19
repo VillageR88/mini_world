@@ -36,6 +36,7 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    MainApp.launch(MainApp.class, args);
+    Params.parametrize(args);
+    if (Params.isGUI) MainApp.launch(MainApp.class, args);
   }
 }
