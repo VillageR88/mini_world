@@ -5,12 +5,12 @@ import mini_world.ui.MainApp;
 
 public class Main {
 
-  private static final Grid grid = new Grid();
+  private static Grid grid = new Grid();
 
-  /**
-   * @UIOnly
-   * Use only in ui sub-package
-   */
+  public static void restartSimulation() {
+    grid = new Grid();
+  }
+
   public static void simulateNextDay() {
     grid.simulateNextDay();
   }

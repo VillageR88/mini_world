@@ -84,7 +84,7 @@ public class FXMLController {
       (Main.isProductionDay() ? " (production day)" : "") +
       "\n"
     );
-    buttonSimulation.setOnAction(e -> {
+    buttonSimulation.setOnAction(_ -> {
       Main.simulateNextDay();
       label.setText(
         "Day " +
@@ -94,7 +94,7 @@ public class FXMLController {
       );
       drawWorld(canvasGc);
     });
-    buttonQuit.setOnAction(e -> {
+    buttonQuit.setOnAction(_ -> {
       Platform.exit();
     });
     drawWorld(canvasGc);

@@ -29,6 +29,11 @@ dependencies {
 
     // This dependency is used by the application.
     implementation libs.guava
+
+    //my dependencies
+    implementation 'org.json:json:20250517'
+    implementation 'net.java.dev.jna:jna:5.14.0'
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
