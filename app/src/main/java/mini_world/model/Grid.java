@@ -10,6 +10,7 @@ public class Grid {
   private final Entity[][] grid = new Entity[10][10];
   private int time = 1;
   private final boolean[][] skipLegDayCoordinates = new boolean[10][10];
+  public static final int NO_WINNER = -1;
 
   public Grid() {
     Base player1Base = new Base('A', 1);
@@ -28,6 +29,20 @@ public class Grid {
     doFight();
     moveUnits();
     eraseSkipLegDayCoordinates();
+  }
+
+  public int getWinner() {
+    int winner = NO_WINNER;
+    for (int y = 0; y < 10; y++) {
+      for (int x = 0; x < 10; x++) {
+        if (this.grid[y][x] != null) {
+          if (winner == NO_WINNER) {
+            winner = this.grid[y][x].getSide();
+          } else if (winner != this.grid[y][x].getSide()) return NO_WINNER;
+        }
+      }
+    }
+    return winner;
   }
 
   public void simulateNextDay() {

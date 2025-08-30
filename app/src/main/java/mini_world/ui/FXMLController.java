@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import mini_world.logic.Main;
+import static mini_world.model.Grid.NO_WINNER;
 
 public class FXMLController {
 
@@ -24,6 +25,7 @@ public class FXMLController {
   private Canvas canvas;
 
   double canvasSectorSpace;
+  int winner;
 
   private void drawWorld(GraphicsContext canvasGc) {
     int y = 0;
@@ -74,25 +76,40 @@ public class FXMLController {
     }
   }
 
+  private void setInitialConditions() {
+    winner = NO_WINNER;
+    buttonSimulation.setText("Run simulation");
+    label.setText(
+        "Day " +
+            Main.getTime() +
+            (Main.isProductionDay() ? " (production day)" : "") +
+            "\n");
+  }
+
   public void initialize() {
     canvasSectorSpace = canvas.getWidth() / 10;
     canvasSectorSpace = canvas.getHeight() / 10;
     GraphicsContext canvasGc = canvas.getGraphicsContext2D();
-    label.setText(
-      "Day " +
-      Main.getTime() +
-      (Main.isProductionDay() ? " (production day)" : "") +
-      "\n"
-    );
+    setInitialConditions();
     buttonSimulation.setOnAction(_ -> {
-      Main.simulateNextDay();
-      label.setText(
-        "Day " +
-        Main.getTime() +
-        (Main.isProductionDay() ? " (production day)" : "") +
-        "\n"
-      );
-      drawWorld(canvasGc);
+      if (winner == NO_WINNER) {
+        Main.simulateNextDay();
+        label.setText(
+            "Day " +
+                Main.getTime() +
+                (Main.isProductionDay() ? " (production day)" : "") +
+                "\n");
+        drawWorld(canvasGc);
+        winner = Main.getWinner();
+        if (winner != NO_WINNER) {
+          buttonSimulation.setText("Restart simulation");
+          label.setText("Player " + winner + " WINS!");
+        }
+      } else {
+        Main.restartSimulation();
+        setInitialConditions();
+        drawWorld(canvasGc);
+      }
     });
     buttonQuit.setOnAction(_ -> {
       Platform.exit();

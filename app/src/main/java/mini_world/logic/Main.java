@@ -31,6 +31,10 @@ public class Main {
     return grid.getTime();
   }
 
+  public static int getWinner() {
+    return grid.getWinner();
+  }
+
   public static boolean isProductionDay() {
     return grid.isProductionDay();
   }
