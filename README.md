@@ -19,13 +19,7 @@ Players have bases, produce units periodically, move them on a grid, and engage 
 
 Use the Gradle wrapper to build the project:
 
-- **Windows:**
-
-```bash
-.\gradlew.bat build
-```
-
-- **Linux/macOS:**
+- **PowerShell / Linux / macOS:**
 
 ```bash
 ./gradlew build
@@ -35,13 +29,7 @@ Use the Gradle wrapper to build the project:
 
 After building, run the application using:
 
-- **Windows:**
-
-```bash
-.\gradlew.bat run
-```
-
-- **Linux/macOS:**
+- **PowerShell / Linux / macOS:**
 
 ```bash
 ./gradlew run
@@ -51,7 +39,3 @@ After building, run the application using:
 
 - Improvements to game mechanics
 - Implementing AI-driven unit behavior
-
-## Notes
-
-While AI is a valuable tool in the learning process, the entire code of this project is purely handwritten using traditional coding practices — no “vibe coding” or auto-generated solutions.

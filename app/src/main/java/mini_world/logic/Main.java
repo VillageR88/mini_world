@@ -5,12 +5,12 @@ import mini_world.ui.MainApp;
 
 public class Main {
 
-  private static final Grid grid = new Grid();
+  private static Grid grid = new Grid();
 
-  /**
-   * @UIOnly
-   * Use only in ui sub-package
-   */
+  public static void restartSimulation() {
+    grid = new Grid();
+  }
+
   public static void simulateNextDay() {
     grid.simulateNextDay();
   }
@@ -31,11 +31,16 @@ public class Main {
     return grid.getTime();
   }
 
+  public static int getWinner() {
+    return grid.getWinner();
+  }
+
   public static boolean isProductionDay() {
     return grid.isProductionDay();
   }
 
   public static void main(String[] args) {
-    MainApp.launch(MainApp.class, args);
+    Params.parametrize(args);
+    if (Params.isGUI) MainApp.launch(MainApp.class, args);
   }
 }

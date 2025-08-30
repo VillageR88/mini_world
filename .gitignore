@@ -7,3 +7,4 @@ build
 # Additional ignore
 app/bin
 .vscode
+config.json

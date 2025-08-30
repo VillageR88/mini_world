@@ -1,10 +1,16 @@
 package mini_world.model;
 
+import mini_world.logic.Logs;
+import mini_world.logic.Params;
+import mini_world.logic.PipeClient;
+import org.json.JSONObject;
+
 public class Grid {
 
   private final Entity[][] grid = new Entity[10][10];
   private int time = 1;
   private final boolean[][] skipLegDayCoordinates = new boolean[10][10];
+  public static final int NO_WINNER = -1;
 
   public Grid() {
     Base player1Base = new Base('A', 1);
@@ -23,6 +29,20 @@ public class Grid {
     doFight();
     moveUnits();
     eraseSkipLegDayCoordinates();
+  }
+
+  public int getWinner() {
+    int winner = NO_WINNER;
+    for (int y = 0; y < 10; y++) {
+      for (int x = 0; x < 10; x++) {
+        if (this.grid[y][x] != null) {
+          if (winner == NO_WINNER) {
+            winner = this.grid[y][x].getSide();
+          } else if (winner != this.grid[y][x].getSide()) return NO_WINNER;
+        }
+      }
+    }
+    return winner;
   }
 
   public void simulateNextDay() {
@@ -58,10 +78,10 @@ public class Grid {
     return time % 7 == 1;
   }
 
-  private class ScanResult {
+  public class ScanResult {
 
-    int[][] possibleLocations;
-    int possibilitiesLength;
+    public int[][] possibleLocations;
+    public int possibilitiesLength;
 
     public ScanResult(int[][] possibleLocations, int possibilitiesLength) {
       this.possibleLocations = possibleLocations;
@@ -69,7 +89,7 @@ public class Grid {
     }
   }
 
-  private enum Stance {
+  public enum Stance {
     AVOID,
     FIGHT,
   }
@@ -154,12 +174,10 @@ public class Grid {
         );
         if (scanResult == null) continue;
         if (scanResult.possibilitiesLength > 0) {
-          int rolledFight = (int) (
-            Math.random() * scanResult.possibilitiesLength
-          );
+          int rolledFight = resolveAction(scanResult, entity, Stance.FIGHT);
           int fY = scanResult.possibleLocations[rolledFight][0];
           int fX = scanResult.possibleLocations[rolledFight][1];
-          if ((int) (Math.random() * 2) == 1) grid[fY][fX] =
+          if ((int) (Math.random() * 2) == 1) grid[fY][fX] = // 50%/50% battle resolver
             null; else grid[y][x] = null;
         }
       }
@@ -179,9 +197,7 @@ public class Grid {
         if (skipLegDayCoordinates[y][x] == true) continue;
         if (scanResult == null) continue;
         if (scanResult.possibilitiesLength > 0) {
-          int rolledMove = (int) (
-            Math.random() * scanResult.possibilitiesLength
-          );
+          int rolledMove = resolveAction(scanResult, entity, Stance.AVOID);
           int mY = scanResult.possibleLocations[rolledMove][0];
           int mX = scanResult.possibleLocations[rolledMove][1];
           grid[mY][mX] = grid[y][x];
@@ -190,6 +206,31 @@ public class Grid {
         }
       }
     }
+  }
+
+  @SuppressWarnings("SleepWhileInLoop")
+  private int resolveAction(
+    ScanResult scanResult,
+    Entity entity,
+    Stance stance
+  ) {
+    JSONObject log = Logs.create(scanResult, stance);
+    if (Params.getTrainedPlayer() == 2 && entity.getSide() == 2) {
+      PipeClient.sendMessage(log);
+      while (true) {
+        JSONObject response = PipeClient.getMessage();
+        if ("error".equals(response.getString("name"))) {
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+          }
+        } else {
+          return response.getInt("resolve");
+        }
+      }
+    }
+    return (int) (Math.random() * scanResult.possibilitiesLength);
   }
 
   public void proceedTime() {
